@@ -10,6 +10,7 @@
     --bg: #0a0a0f;
     --bg2: #111118;
     --surface: #16161f;
+    --faint: #3a3a4a;
     --black: #f0f0ed;
     --mid: #888899;
     --faint-text: #555566;
@@ -24,32 +25,35 @@
     --content: 820px;
     --gutter: clamp(1rem, 4vw, 2rem);
     --nav-h: 56px;
-    --nav-bg: rgba(10,10,15,0.72);
+    --nav-bg: rgba(10,10,15,0.88);
+    --transition: 0.55s cubic-bezier(0.16,1,0.3,1);
   }
   html[data-theme="light"] {
     --bg: #f6f6f4;
-    --bg2: #f6f6f4;
+    --bg2: #f0f0ee;
     --surface: #ffffff;
     --black: #0c0c0c;
     --mid: #555;
-    --faint-text: #888;
+    --faint: #ddd;
+    --faint-text: #bbb;
     --blue: #1455f0;
-    --blue-dim: rgba(20,85,240,0.25);
-    --blue-light: rgba(20,85,240,0.12);
-    --glow: rgba(20,85,240,0.18);
+    --blue-dim: #3366ff;
+    --blue-light: #edf0ff;
+    --glow: rgba(20,85,240,0.12);
     --border: rgba(12,12,12,0.09);
-    --border-strong: rgba(12,12,12,0.16);
+    --border-strong: rgba(12,12,12,0.15);
     --nav-bg: rgba(246,246,244,0.92);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; color-scheme: dark; }
-  html[data-theme="light"] { color-scheme: light; }
+  html { scroll-behavior: smooth; }
   body {
-    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    background: var(--bg);
     color: var(--black);
     font-family: var(--sans);
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
+    transition: background var(--transition), color var(--transition);
+    position: relative;
     min-height: 100vh;
   }
   body::after {
@@ -57,68 +61,68 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-    opacity: 0;
-    mix-blend-mode: overlay;
-    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    z-index: 9999;
   }
-  html:not([data-theme="light"]) body::after { opacity: 0.04; }
+  html[data-theme="light"] body::after { display: none; }
   img { max-width: 100%; height: auto; }
-  .container { max-width: var(--content); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+  .container { max-width: var(--content); margin: 0 auto; padding: 0 var(--gutter); }
 
   /* NAV */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--nav-bg); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); padding-top: env(safe-area-inset-top, 0px); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--nav-bg); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); padding-top: env(safe-area-inset-top, 0px); transition: background var(--transition); }
   .nav-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--gutter); height: var(--nav-h); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; }
   .nav-logo { font-family: var(--mono); font-size: 0.76rem; color: var(--blue); letter-spacing: 0.02em; }
   .nav-links { display: flex; gap: clamp(0.9rem, 2.2vw, 1.6rem); list-style: none; align-items: center; justify-content: center; min-width: 0; }
   .nav-links a { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
-  .nav-links a:hover, .nav-links a.active { color: var(--blue); }
-  .theme-toggle { width: 30px; height: 30px; border: 1px solid var(--border-strong); border-radius: 6px; background: transparent; color: var(--black); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
-  .theme-toggle:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+  .nav-links a:hover, .nav-links a.active { color: var(--black); }
+  .theme-toggle { width: 30px; height: 30px; border: 1px solid var(--border-strong); border-radius: 6px; background: transparent; color: var(--mid); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
+  .theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
 
   /* HERO — full bleed split */
   #hero { padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); min-height: 100vh; min-height: 100svh; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr) clamp(280px, 36vw, 420px); }
   .hero-left { display: flex; align-items: center; padding: 5rem var(--gutter) 5rem 0; min-width: 0; }
   .hero-left-pad { padding-left: var(--gutter); max-width: var(--content); width: 100%; }
   .hero-left-inner { max-width: 380px; }
-  .hero-status { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--mid); margin-bottom: 2rem; }
+  .hero-status { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.67rem; letter-spacing: 0.07em; color: var(--mid); margin-bottom: 2.2rem; }
   .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: blink 2.4s ease-in-out infinite; flex-shrink: 0; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  .hero-name { font-size: clamp(2.4rem, 4.8vw, 3.8rem); font-weight: 300; line-height: 1.12; letter-spacing: -0.035em; margin-bottom: 0.3rem; }
+  .hero-name { font-size: clamp(2.4rem, 4.8vw, 3.8rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.035em; margin-bottom: 0.4rem; }
+  .hero-name-line { display: block; }
   .hero-name em { font-style: normal; color: var(--blue); }
-  .hero-role { font-family: var(--mono); font-size: 0.72rem; color: var(--mid); letter-spacing: 0.05em; margin-bottom: 1.8rem; }
+  .hero-role { font-family: var(--mono); font-size: 0.72rem; color: var(--mid); letter-spacing: 0.06em; margin-bottom: 1.8rem; }
   .hero-bio { font-size: 0.94rem; line-height: 1.9; color: var(--mid); margin-bottom: 2.2rem; font-weight: 300; }
   .hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
   .btn { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-decoration: none; display: inline-block; transition: all 0.2s; border: none; cursor: pointer; }
-  .btn-fill { background: var(--blue); color: #0a0a0f; padding: 0.6rem 1.3rem; border: 1px solid var(--blue-dim); box-shadow: 0 0 0 1px var(--blue-dim), 0 10px 30px var(--glow); }
-  .btn-fill:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--blue), 0 12px 34px var(--glow); }
-  .btn-ghost { color: var(--mid); border-bottom: 1px solid var(--border-strong); padding-bottom: 2px; background: none; }
+  .btn-fill { background: var(--blue); color: white; padding: 0.65rem 1.4rem; box-shadow: 0 0 20px var(--glow); }
+  .btn-fill:hover { background: var(--blue-dim); box-shadow: 0 0 30px var(--glow); }
+  .btn-ghost { color: var(--mid); border-bottom: 1px solid var(--faint); padding-bottom: 2px; background: none; }
   .btn-ghost:hover { color: var(--black); border-color: var(--black); }
 
   /* HERO PHOTO */
   .hero-photo { position: relative; overflow: hidden; height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h) - env(safe-area-inset-top, 0px)); }
   .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; filter: brightness(0.75) contrast(1.1); }
-  html[data-theme="light"] .hero-photo img { filter: none; }
-  .hero-photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--bg) 0%, rgba(10,10,15,0.2) 35%, transparent 65%); z-index: 1; pointer-events: none; }
-  html[data-theme="light"] .hero-photo::before { background: linear-gradient(to right, var(--bg) 0%, rgba(246,246,244,0.3) 35%, transparent 65%); }
-  .hero-photo::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to top, var(--bg), transparent); z-index: 1; pointer-events: none; }
+  html[data-theme="light"] .hero-photo img { filter: brightness(1) contrast(1); }
+  .hero-photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--bg) 0%, rgba(10,10,15,0.5) 40%, transparent 70%); z-index: 1; pointer-events: none; }
+  html[data-theme="light"] .hero-photo::before { background: linear-gradient(to right, var(--bg) 0%, rgba(246,246,244,0.3) 40%, transparent 70%); }
+  .hero-photo::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 150px; background: linear-gradient(to top, var(--bg), transparent); z-index: 1; pointer-events: none; }
 
   /* HERO ANIMATE */
-  .hero-animate { opacity: 0; transform: translateY(14px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .hero-animate { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
   .hero-animate.in { opacity: 1; transform: none; }
 
   /* SECTIONS */
   section { border-bottom: 1px solid var(--border); }
   .section-inner { padding: 5rem 0; }
   .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3rem; }
-  .section-num { font-family: var(--mono); font-size: 0.66rem; color: var(--faint-text); letter-spacing: 0.06em; flex-shrink: 0; }
+  .section-num { font-family: var(--mono); font-size: 0.64rem; color: var(--faint-text); letter-spacing: 0.06em; flex-shrink: 0; }
   .section-title { font-size: 1.45rem; font-weight: 400; letter-spacing: -0.02em; }
 
   /* ABOUT */
-  .about-grid { display: grid; grid-template-columns: 220px 1fr; gap: 3.5rem; align-items: start; }
-  .about-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; display: block; }
+  .about-grid { display: grid; grid-template-columns: 200px 1fr; gap: 3.5rem; align-items: start; }
+  .about-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; display: block; filter: grayscale(20%); }
+  html[data-theme="light"] .about-photo img { filter: none; }
   .about-photo-caption { font-family: var(--mono); font-size: 0.62rem; color: var(--faint-text); letter-spacing: 0.06em; margin-top: 0.6rem; }
-  .about-content p { font-size: 0.95rem; line-height: 1.85; color: var(--mid); margin-bottom: 1.1rem; }
+  .about-content p { font-size: 0.95rem; line-height: 1.88; color: var(--mid); margin-bottom: 1.1rem; }
   .about-content strong { color: var(--black); font-weight: 500; }
   .about-meta { margin-top: 1.8rem; }
   .meta-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.84rem; }
@@ -130,9 +134,9 @@
   /* SKILLS */
   .skill-row { display: grid; grid-template-columns: 130px 1fr; gap: 2rem; padding: 1.3rem 0; border-bottom: 1px solid var(--border); align-items: start; }
   .skill-row:first-child { border-top: 1px solid var(--border); }
-  .skill-cat { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--mid); padding-top: 3px; }
+  .skill-cat { font-family: var(--mono); font-size: 0.67rem; letter-spacing: 0.06em; color: var(--mid); padding-top: 3px; }
   .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-  .chip { font-family: var(--mono); font-size: 0.68rem; padding: 0.28rem 0.7rem; background: var(--surface); border: 1px solid var(--border); color: var(--black); transition: border-color 0.2s, color 0.2s; cursor: default; }
+  .chip { font-family: var(--mono); font-size: 0.68rem; padding: 0.28rem 0.7rem; background: var(--surface); border: 1px solid var(--border); color: var(--mid); transition: border-color 0.2s, color 0.2s; cursor: default; }
   .chip:hover { border-color: var(--blue); color: var(--blue); }
   .chip.hi { background: var(--blue-light); border-color: var(--blue-dim); color: var(--blue); }
 
@@ -141,7 +145,7 @@
   .project-item:first-child { border-top: 1px solid var(--border); }
   .project-item:hover { opacity: 0.78; }
   .proj-meta { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.45rem; flex-wrap: wrap; }
-  .proj-year { font-family: var(--mono); font-size: 0.65rem; color: var(--faint-text); letter-spacing: 0.06em; }
+  .proj-year { font-family: var(--mono); font-size: 0.64rem; color: var(--faint-text); letter-spacing: 0.06em; }
   .proj-badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; padding: 0.15rem 0.5rem; background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-dim); }
   .proj-name { font-size: 1.05rem; font-weight: 400; margin-bottom: 0.45rem; letter-spacing: -0.01em; }
   .proj-desc { font-size: 0.87rem; color: var(--mid); line-height: 1.7; margin-bottom: 0.85rem; max-width: 460px; }
@@ -173,14 +177,43 @@
 
   /* TESTIMONIALS */
   .testimonials-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem; }
-  .testimonial-card { background: var(--surface); border: 1px solid var(--border); padding: 1.8rem; position: relative; }
-  .testimonial-card::before { content: '“'; position: absolute; top: 12px; left: 14px; font-size: 2.4rem; color: var(--blue); opacity: 0.3; font-family: var(--sans); }
-  .testimonial-quote { font-style: italic; color: var(--mid); line-height: 1.7; margin-bottom: 1.4rem; }
-  .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
-  .testimonial-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; border: 1px solid var(--blue-dim); }
-  .testimonial-meta { display: flex; flex-direction: column; gap: 0.1rem; }
-  .testimonial-name { font-size: 0.88rem; }
-  .testimonial-title { font-family: var(--mono); font-size: 0.66rem; color: var(--mid); letter-spacing: 0.04em; }
+  .testi-card { background: var(--surface); border: 1px solid var(--border); padding: 1.8rem; position: relative; }
+  .testi-quote-mark { position: absolute; top: 12px; left: 14px; font-size: 2.4rem; color: var(--blue); opacity: 0.3; font-family: var(--sans); }
+  .testi-text { font-style: italic; color: var(--mid); line-height: 1.7; margin-bottom: 1.4rem; }
+  .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+  .testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; border: 1px solid var(--blue-dim); }
+  .testi-name { font-size: 0.88rem; }
+  .testi-title { font-family: var(--mono); font-size: 0.66rem; color: var(--mid); letter-spacing: 0.04em; }
+
+  /* GITHUB ACTIVITY */
+  .github-wrap { display: flex; flex-direction: column; gap: 2.2rem; }
+  .gh-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--border); }
+  .gh-stat { background: var(--surface); padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .gh-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; color: var(--faint-text); text-transform: uppercase; }
+  .gh-value { font-size: 1.2rem; }
+  .gh-heatmap-wrap { border: 1px solid var(--border); background: var(--surface); padding: 0.8rem; overflow-x: auto; }
+  .gh-heatmap { display: flex; gap: 3px; }
+  .gh-week { display: flex; flex-direction: column; gap: 3px; }
+  .gh-cell { width: 11px; height: 11px; border-radius: 2px; background: var(--surface); transition: transform 0.15s ease; }
+  .gh-cell.l1 { background: var(--blue); opacity: 0.25; }
+  .gh-cell.l2 { background: var(--blue); opacity: 0.45; }
+  .gh-cell.l3 { background: var(--blue); opacity: 0.7; }
+  .gh-cell.l4 { background: var(--blue); opacity: 1; box-shadow: 0 0 8px var(--glow); }
+  .gh-cell:hover { transform: scale(1.4); }
+  .gh-langs { display: flex; flex-direction: column; gap: 0.8rem; }
+  .gh-lang-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); }
+  .gh-lang-seg { height: 100%; }
+  .gh-lang-legend { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; font-family: var(--mono); font-size: 0.62rem; color: var(--mid); }
+  .gh-lang-item { display: flex; align-items: center; gap: 0.4rem; }
+  .gh-lang-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .gh-repos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .gh-repo { border: 1px solid var(--border); padding: 1rem; text-decoration: none; color: var(--black); background: transparent; transition: background 0.2s; }
+  .gh-repo:hover { background: var(--surface); }
+  .gh-repo-name { font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .gh-repo-desc { font-size: 0.82rem; color: var(--mid); line-height: 1.5; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .gh-repo-meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.62rem; color: var(--faint-text); letter-spacing: 0.04em; }
+  .gh-fallback { font-family: var(--mono); font-size: 0.7rem; color: var(--mid); }
+  .gh-fallback a { color: var(--blue); text-decoration: none; }
 
   /* CONTACT */
   #contact .section-inner { padding-bottom: 7rem; }
@@ -206,10 +239,10 @@
   .form-success { display: none; font-family: var(--mono); font-size: 0.72rem; color: #3ecf8e; letter-spacing: 0.04em; padding: 1rem 0; }
 
   /* MODAL */
-  .modal { position: fixed; inset: 0; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+  .modal { position: fixed; inset: 0; z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
   .modal.open { opacity: 1; pointer-events: auto; }
-  .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); }
-  .modal-panel { position: absolute; left: 50%; bottom: 0; transform: translate(-50%, 40px); width: min(920px, 100%); background: var(--surface); border: 1px solid var(--border-strong); border-bottom: none; border-radius: 18px 18px 0 0; padding: 2.2rem var(--gutter) 2.6rem; opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease; }
+  .modal-backdrop { position: absolute; inset: 0; background: rgba(5,5,10,0.85); backdrop-filter: blur(8px); }
+  .modal-panel { position: absolute; left: 50%; bottom: 0; transform: translate(-50%, 40px); width: min(920px, 100%); max-height: 90vh; overflow: auto; background: var(--surface); border: 1px solid var(--border-strong); border-bottom: none; border-radius: 18px 18px 0 0; padding: 2.2rem var(--gutter) 2.6rem; opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease; }
   .modal.open .modal-panel { transform: translate(-50%, 0); opacity: 1; }
   .modal-close { position: absolute; top: 14px; right: 16px; width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-strong); background: transparent; color: var(--black); cursor: pointer; font-size: 1rem; }
   .modal-tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--faint-text); margin-bottom: 0.4rem; text-transform: uppercase; }
@@ -224,7 +257,7 @@
   .modal-value { font-size: 1.6rem; color: var(--blue); margin-bottom: 0.3rem; }
   .modal-label { font-family: var(--mono); font-size: 0.62rem; color: var(--mid); letter-spacing: 0.05em; }
   .modal-stack, .modal-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .modal-links a { font-family: var(--mono); font-size: 0.66rem; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--border-strong); padding-bottom: 2px; }
+  .modal-links a { font-family: var(--mono); font-size: 0.66rem; color: var(--black); text-decoration: none; border: 1px solid var(--border-strong); padding: 0.35rem 0.6rem; border-radius: 4px; }
 
   /* FOOTER */
   footer { padding: 1.4rem 0; }
@@ -254,6 +287,7 @@
     .proj-links { flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: wrap; }
     .edu-item { flex-direction: column; gap: 0.3rem; }
     .testimonials-grid { grid-template-columns: 1fr; }
+    .gh-repos { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 520px) {
@@ -290,6 +324,7 @@
       <li><a href="#projects">projects</a></li>
       <li><a href="#experience">experience</a></li>
       <li><a href="#testimonials">testimonials</a></li>
+      <li><a href="#github">github</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀</button>
@@ -302,7 +337,10 @@
     <div class="hero-left-pad">
       <div class="hero-left-inner">
         <div class="hero-status hero-animate" style="transition-delay:0.1s;"><span class="dot"></span>open to opportunities</div>
-        <h1 class="hero-name hero-animate" style="transition-delay:0.26s;">Full-Stack<br><em>Developer.</em></h1>
+        <h1 class="hero-name hero-animate" style="transition-delay:0.26s;">
+          <span class="hero-name-line">Full-Stack</span>
+          <span class="hero-name-line"><em>Developer.</em></span>
+        </h1>
         <p class="hero-role hero-animate" style="transition-delay:0.42s;">Darshan Subramaniam &nbsp;/&nbsp; Melbourne, AU</p>
         <p class="hero-bio hero-animate" style="transition-delay:0.54s;">IT graduate from Deakin University building end-to-end web and mobile applications — from polished interfaces to cloud-deployed backends. Currently interning while shipping live products used by real businesses.</p>
         <div class="hero-actions hero-animate" style="transition-delay:0.66s;">
@@ -358,12 +396,8 @@
       </div>
       <div>
         <div class="skill-row reveal">
-          <span class="skill-cat">languages</span>
-          <div class="chips"><span class="chip hi">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
-        </div>
-        <div class="skill-row reveal">
           <span class="skill-cat">frontend</span>
-          <div class="chips"><span class="chip hi">React.js</span><span class="chip hi">Next.js</span><span class="chip">Tailwind CSS</span><span class="chip">Flutter</span></div>
+          <div class="chips"><span class="chip hi">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip hi">React.js</span><span class="chip hi">Next.js</span><span class="chip">Tailwind CSS</span><span class="chip">Flutter</span></div>
         </div>
         <div class="skill-row reveal">
           <span class="skill-cat">backend</span>
@@ -391,7 +425,7 @@
         <h2 class="section-title">Projects</h2>
       </div>
       <div>
-        <div class="project-item reveal" data-project="dobook" role="button" tabindex="0">
+        <div class="project-item reveal" data-case="dobook" role="button" tabindex="0">
           <div>
             <div class="proj-meta"><span class="proj-year">Dec 2025 — Present</span><span class="proj-badge">Live</span></div>
             <div class="proj-name">DoBook — Booking &amp; CRM Platform</div>
@@ -400,11 +434,11 @@
             <div class="proj-hint">↗ click for case study</div>
           </div>
           <div class="proj-links">
-            <a href="https://www.do-book.com" target="_blank" class="proj-link primary">Live ↗</a>
-            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link">GitHub</a>
+            <a href="https://www.do-book.com" target="_blank" class="proj-link primary" onclick="event.stopPropagation()">Live ↗</a>
+            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link" onclick="event.stopPropagation()">GitHub</a>
           </div>
         </div>
-        <div class="project-item reveal" data-project="shanbooth" role="button" tabindex="0">
+        <div class="project-item reveal" data-case="shanbooth" role="button" tabindex="0">
           <div>
             <div class="proj-meta"><span class="proj-year">Jun 2025 — Present</span><span class="proj-badge">Live</span></div>
             <div class="proj-name">The Shan Booth — Event Booking</div>
@@ -413,11 +447,11 @@
             <div class="proj-hint">↗ click for case study</div>
           </div>
           <div class="proj-links">
-            <a href="https://www.photoboothwithshan.com.au" target="_blank" class="proj-link primary">Live ↗</a>
-            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link">GitHub</a>
+            <a href="https://www.photoboothwithshan.com.au" target="_blank" class="proj-link primary" onclick="event.stopPropagation()">Live ↗</a>
+            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link" onclick="event.stopPropagation()">GitHub</a>
           </div>
         </div>
-        <div class="project-item reveal" data-project="nutrihelp" role="button" tabindex="0">
+        <div class="project-item reveal" data-case="nutrihelp" role="button" tabindex="0">
           <div>
             <div class="proj-meta"><span class="proj-year">Sep 2023 — Jan 2024</span><span class="proj-badge">Distinction</span></div>
             <div class="proj-name">Nutrihelp — Nutrition Tracker</div>
@@ -426,10 +460,10 @@
             <div class="proj-hint">↗ click for case study</div>
           </div>
           <div class="proj-links">
-            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link primary">GitHub ↗</a>
+            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link primary" onclick="event.stopPropagation()">GitHub ↗</a>
           </div>
         </div>
-        <div class="project-item reveal" data-project="jobmarket" role="button" tabindex="0">
+        <div class="project-item reveal" data-case="jobmarket" role="button" tabindex="0">
           <div>
             <div class="proj-meta"><span class="proj-year">May 2023 — Aug 2023</span><span class="proj-badge">Higher Distinction</span></div>
             <div class="proj-name">Job Marketplace Web App</div>
@@ -438,7 +472,7 @@
             <div class="proj-hint">↗ click for case study</div>
           </div>
           <div class="proj-links">
-            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link primary">GitHub ↗</a>
+            <a href="https://github.com/DARSHcverse?tab=repositories" target="_blank" class="proj-link primary" onclick="event.stopPropagation()">GitHub ↗</a>
           </div>
         </div>
       </div>
@@ -511,46 +545,90 @@
         <h2 class="section-title">Testimonials</h2>
       </div>
       <div class="testimonials-grid">
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">Darshan delivers end-to-end features with clean architecture and a designer’s eye. He’s reliable, fast, and always proactive about polish and performance.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">RK</div>
-            <div class="testimonial-meta">
-              <span class="testimonial-name">Ravi K.</span>
-              <span class="testimonial-title">Product Lead, Remote King</span>
+        <div class="testi-card reveal">
+          <span class="testi-quote-mark">"</span>
+          <p class="testi-text">Darshan built our entire web presence from scratch. The attention to detail, performance, and clean code was impressive — the site has been rock solid since launch.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">RK</div>
+            <div>
+              <div class="testi-name">Remote King Team</div>
+              <div class="testi-title">Employer · Hallam, VIC</div>
             </div>
           </div>
         </div>
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">We needed a booking flow that just works. Darshan designed the UX, shipped the backend, and made payments seamless.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">HS</div>
-            <div class="testimonial-meta">
-              <span class="testimonial-name">Hannah S.</span>
-              <span class="testimonial-title">Event Client, Melbourne</span>
+        <div class="testi-card reveal">
+          <span class="testi-quote-mark">"</span>
+          <p class="testi-text">The DoBook platform completely transformed how I manage my bookings and clients. It's intuitive, fast, and the automated invoicing saves me hours every week.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">DS</div>
+            <div>
+              <div class="testi-name">DoBook Client</div>
+              <div class="testi-title">Service Business Owner · Melbourne</div>
             </div>
           </div>
         </div>
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">Strong communication, precise execution, and attention to the little details that make the UI feel premium.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">JT</div>
-            <div class="testimonial-meta">
-              <span class="testimonial-name">Jordan T.</span>
-              <span class="testimonial-title">Design Collaborator</span>
+        <div class="testi-card reveal">
+          <span class="testi-quote-mark">"</span>
+          <p class="testi-text">Darshan consistently delivered high-quality prototypes on time. His ability to translate client requirements into polished Figma work made the whole project smoother.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">DT</div>
+            <div>
+              <div class="testi-name">Deakin Talent Hub</div>
+              <div class="testi-title">Project Supervisor · Burwood, VIC</div>
             </div>
           </div>
         </div>
-        <div class="testimonial-card reveal">
-          <p class="testimonial-quote">He takes ownership, thinks like a product person, and builds with scale and maintainability in mind.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">ML</div>
-            <div class="testimonial-meta">
-              <span class="testimonial-name">Mira L.</span>
-              <span class="testimonial-title">Engineering Manager</span>
+        <div class="testi-card reveal">
+          <span class="testi-quote-mark">"</span>
+          <p class="testi-text">The Shan Booth site is exactly what I needed — beautiful design, simple checkout, and bookings started coming in within the first week of going live.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SB</div>
+            <div>
+              <div class="testi-name">The Shan Booth</div>
+              <div class="testi-title">Business Owner · Melbourne</div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB ACTIVITY -->
+<section id="github">
+  <div class="container">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-num">07</span>
+        <h2 class="section-title">GitHub Activity</h2>
+      </div>
+      <div class="github-wrap reveal" id="githubWrap">
+        <div class="gh-stats" id="ghStats">
+          <div class="gh-stat">
+            <span class="gh-label">public repos</span>
+            <span class="gh-value" id="ghRepoCount">—</span>
+          </div>
+          <div class="gh-stat">
+            <span class="gh-label">contribs (est.)</span>
+            <span class="gh-value" id="ghContribs">—</span>
+          </div>
+          <div class="gh-stat">
+            <span class="gh-label">followers</span>
+            <span class="gh-value" id="ghFollowers">—</span>
+          </div>
+        </div>
+
+        <div class="gh-heatmap-wrap">
+          <div class="gh-heatmap" id="ghHeatmap"></div>
+        </div>
+
+        <div class="gh-langs">
+          <div class="gh-lang-bar" id="ghLangBar"></div>
+          <div class="gh-lang-legend" id="ghLangLegend"></div>
+        </div>
+
+        <div class="gh-repos" id="ghReposGrid"></div>
+        <div class="gh-fallback" id="ghFallback" hidden>Could not load GitHub data. View profile ↗</div>
       </div>
     </div>
   </div>
@@ -561,7 +639,7 @@
   <div class="container">
     <div class="section-inner">
       <div class="section-header reveal">
-        <span class="section-num">07</span>
+        <span class="section-num">08</span>
         <h2 class="section-title">Contact</h2>
       </div>
       <div class="contact-body">
@@ -678,7 +756,7 @@
   updateActive();
 
   // Case study modal
-  const projectData = {
+  const caseData = {
     dobook: {
       tag: 'SaaS / Live',
       title: 'DoBook — Booking & CRM Platform',
@@ -764,7 +842,7 @@
   const modalLinks = document.getElementById('modalLinks');
 
   const openModal = (key) => {
-    const data = projectData[key];
+    const data = caseData[key];
     if (!data) return;
     modalTag.textContent = data.tag;
     modalTitle.textContent = data.title;
@@ -790,18 +868,166 @@
   document.querySelectorAll('.project-item').forEach(item => {
     item.addEventListener('click', (e) => {
       if (e.target.closest('a')) return;
-      openModal(item.dataset.project);
+      openModal(item.dataset.case);
     });
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openModal(item.dataset.project);
+        openModal(item.dataset.case);
       }
     });
   });
   modalBackdrop.addEventListener('click', closeModal);
   modalClose.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // GitHub activity
+  (async () => {
+    const username = 'DARSHcverse';
+    const repoCountEl = document.getElementById('ghRepoCount');
+    const contribsEl = document.getElementById('ghContribs');
+    const followersEl = document.getElementById('ghFollowers');
+    const heatmapEl = document.getElementById('ghHeatmap');
+    const heatmapWrap = heatmapEl?.parentElement;
+    const langBarEl = document.getElementById('ghLangBar');
+    const langLegendEl = document.getElementById('ghLangLegend');
+    const reposGridEl = document.getElementById('ghReposGrid');
+    const fallbackEl = document.getElementById('ghFallback');
+
+    const showFallback = () => {
+      if (fallbackEl) {
+        fallbackEl.hidden = false;
+        fallbackEl.innerHTML = `Could not load GitHub data. <a href="https://github.com/${username}" target="_blank" rel="noopener">View profile ↗</a>`;
+      }
+    };
+
+    try {
+      const [userRes, reposRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${username}`),
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`)
+      ]);
+      if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API error');
+      const user = await userRes.json();
+      const repos = await reposRes.json();
+
+      const repoCount = user.public_repos ?? repos.length;
+      const followers = user.followers ?? 0;
+
+      const activityDates = [];
+      repos.forEach(r => {
+        if (r.pushed_at) activityDates.push(new Date(r.pushed_at));
+        if (r.created_at) activityDates.push(new Date(r.created_at));
+      });
+
+      repoCountEl.textContent = repoCount.toLocaleString();
+      followersEl.textContent = followers.toLocaleString();
+      contribsEl.textContent = activityDates.length.toLocaleString();
+
+      // Heatmap
+      const dayCounts = {};
+      activityDates.forEach(d => {
+        const key = d.toISOString().slice(0, 10);
+        dayCounts[key] = (dayCounts[key] || 0) + 1;
+      });
+
+      const weeks = 52;
+      const days = weeks * 7;
+      const start = new Date();
+      start.setDate(start.getDate() - (days - 1));
+
+      heatmapEl.innerHTML = '';
+      for (let w = 0; w < weeks; w++) {
+        const weekCol = document.createElement('div');
+        weekCol.className = 'gh-week';
+        for (let d = 0; d < 7; d++) {
+          const idx = w * 7 + d;
+          const date = new Date(start);
+          date.setDate(start.getDate() + idx);
+          const key = date.toISOString().slice(0, 10);
+          const count = dayCounts[key] || 0;
+          let level = 0;
+          if (count === 1) level = 1;
+          else if (count === 2) level = 2;
+          else if (count === 3) level = 3;
+          else if (count >= 4) level = 4;
+          const cell = document.createElement('div');
+          cell.className = `gh-cell${level ? ` l${level}` : ''}`;
+          cell.title = `${key} • ${count} contributions (est.)`;
+          weekCol.appendChild(cell);
+        }
+        heatmapEl.appendChild(weekCol);
+      }
+      if (heatmapWrap) {
+        heatmapWrap.scrollLeft = heatmapWrap.scrollWidth;
+      }
+
+      // Language bar
+      const langTotals = {};
+      repos.filter(r => !r.fork).forEach(r => {
+        if (!r.language) return;
+        langTotals[r.language] = (langTotals[r.language] || 0) + (r.size || 0);
+      });
+      const langColors = {
+        JavaScript: '#f7df1e',
+        TypeScript: '#3178c6',
+        Python: '#3572A5',
+        HTML: '#e34c26',
+        CSS: '#563d7c',
+        Dart: '#00B4AB',
+        Shell: '#89e051',
+        Java: '#b07219',
+        C: '#555555',
+        'C++': '#f34b7d'
+      };
+      const entries = Object.entries(langTotals).sort((a, b) => b[1] - a[1]);
+      const totalSize = entries.reduce((sum, [, size]) => sum + size, 0);
+      langBarEl.innerHTML = '';
+      langLegendEl.innerHTML = '';
+      entries.forEach(([lang, size]) => {
+        const pct = totalSize ? (size / totalSize) * 100 : 0;
+        const color = langColors[lang] || '#9aa0a6';
+        const seg = document.createElement('span');
+        seg.className = 'gh-lang-seg';
+        seg.style.width = `${pct}%`;
+        seg.style.background = color;
+        langBarEl.appendChild(seg);
+
+        const item = document.createElement('span');
+        item.className = 'gh-lang-item';
+        item.innerHTML = `<span class="gh-lang-dot" style="background:${color}"></span>${lang} ${pct.toFixed(0)}%`;
+        langLegendEl.appendChild(item);
+      });
+
+      // Recent repos
+      const topRepos = repos
+        .filter(r => !r.fork)
+        .sort((a, b) => {
+          if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+          return new Date(b.pushed_at) - new Date(a.pushed_at);
+        })
+        .slice(0, 6);
+
+      reposGridEl.innerHTML = '';
+      topRepos.forEach(r => {
+        const card = document.createElement('a');
+        card.className = 'gh-repo';
+        card.href = r.html_url;
+        card.target = '_blank';
+        card.rel = 'noopener';
+        card.innerHTML = `
+          <div class="gh-repo-name">${r.name}</div>
+          <div class="gh-repo-desc">${r.description || 'No description provided.'}</div>
+          <div class="gh-repo-meta">
+            <span>${r.language || '—'}</span>
+            <span>★ ${r.stargazers_count}</span>
+          </div>
+        `;
+        reposGridEl.appendChild(card);
+      });
+    } catch (err) {
+      showFallback();
+    }
+  })();
 
   // Formspree AJAX submit — stays on page, shows success message
   const form = document.getElementById('contactForm');
